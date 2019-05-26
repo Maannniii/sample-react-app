@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+    jenkins:
+        container_name: jenkins
+        image: jenkins/jenkins:alpine
+        volumes:
+            - ~/.ssh:/root/.ssh
+            - ./home:/var/jenkins_home
+        ports:
+            - 8080:8080
+        restart: always
+        network_mode: bridge
+        extra_hosts:
+            - "server1:1.2.3.4"

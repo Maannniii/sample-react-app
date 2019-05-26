@@ -1,0 +1,23 @@
+---
+# tasks file for deploy
+- name: pull an image
+  docker_image:
+    name: registry:4000/prod
+    force: yes
+    pull: yes
+  tags:
+    - docker_deploy
+
+- name: Re-create Container
+  docker_container:
+    name: nodejs
+    image: registry:4000/prod
+    state: started
+    restart: yes
+    recreate: yes
+    ports:
+      - "5000:5000"
+    network_mode: bridge
+    restart_policy: unless-stopped
+  tags:
+    - docker_deploy

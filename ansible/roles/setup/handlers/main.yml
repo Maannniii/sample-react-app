@@ -1,0 +1,6 @@
+---
+# handlers file for build
+- name: Restart docker
+  systemd:
+    name: docker
+    state: restarted

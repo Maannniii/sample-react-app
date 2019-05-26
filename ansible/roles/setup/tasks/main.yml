@@ -1,0 +1,89 @@
+- name : Get latest compose
+  shell : "curl --insecure -s 'https://api.github.com/repos/docker/compose/releases' | grep -e 'browser_download_url' | grep 'docker-compose-Linux-x86_64\"$' | grep -v -- '-rc' | head -n1 |cut -d '\"' -f4"
+  register: result
+  args:
+    warn: false
+    creates: "/bin/docker-compose"
+  tags:
+    - latest_compose
+ 
+- name: Install docker compose file
+  get_url:
+    url: "{{result.stdout}}"
+    dest: "/bin/docker-compose"
+    mode: "a+x"
+  tags:
+    - latest_compose
+
+- name: "Set timezone to {{tz}}"
+  timezone: 
+    name: "{{tz}}"
+  tags:
+    - set_timezone
+
+- name: include Debian related tasks
+  include_tasks: debian.yml
+  when: ansible_facts['os_family']|lower == 'debian'
+
+- name: include Redhat related tasks
+  include_tasks: redhat.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: Necessary Pip packages
+  pip:
+    name: "{{ item }}"
+    state: latest
+  loop: ["pip","docker"]
+  tags:
+    - ansible_pip_dep
+
+- name: Enable docker for auto start
+  service:
+    enabled: true
+    name: docker
+    state: started
+  tags:
+    - docker_install
+
+- name: Add current user to docker group
+  user:
+    name: "{{ansible_user}}"
+    groups: docker
+    append: yes
+  tags:
+    - docker_install
+
+- name: Update insecure registries
+  json_data:
+    path: "/etc/docker/daemon.json"
+    values: >
+            {
+             "insecure-registries" : ["registry:4000"]
+             }
+  notify:
+    - Restart docker
+  tags:
+    - update_registry
+    - docker_install
+
+- name: Add host entry for registry
+  lineinfile:
+    path: /etc/hosts
+    regexp: '.*\s+registry'
+    line: '{{registry_ip}}    registry'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - host_entry
+
+- name: Add host entry for server2
+  lineinfile:
+    path: /etc/hosts
+    regexp: '.*\s+server2'
+    line: '{{server2_ip}}    server2'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - host_entry

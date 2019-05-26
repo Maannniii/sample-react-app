@@ -1,0 +1,13 @@
+- name: Add Docker YUM repository
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docer-ce.repo
+
+- name: Install Docker and other dependencies
+  yum:
+    name: "{{ item }}"
+    state: latest
+    validate_certs: false
+    disablerepo: docker-ce-edge,docker-ce-test
+    update_cache: true
+  loop: ["epel-release","python","python-pip","screen","yum-utils","htop","device-mapper-persistent-data","lvm2","wget","nmap","curl","vim","docker-ce","docker-ce-cli","containerd.io"]

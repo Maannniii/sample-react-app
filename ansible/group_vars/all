@@ -1,0 +1,13 @@
+ansible_connection: ssh
+ansible_port: 22
+ansible_become: true
+# docker-compose installation properties
+usr_bin_path: /usr/local/bin
+compose_url: https://github.com/docker/compose/releases/download/
+# server timezone
+tz: Asia/Kolkata
+# ips to add in /etc/hosts
+registry_ip: 1.2.3.4
+server2_ip: 1.2.3.5
+# repo to checkout and build on webhook trigger
+git_repo: https://github.com/Maannniii/sample-react-app.git

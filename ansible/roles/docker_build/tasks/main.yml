@@ -1,0 +1,23 @@
+---
+# tasks file for docker_build
+- name: Build Base Docker image to use for production
+  docker_image:
+    name: registry:4000/base
+    path: '{{role_path}}/files'
+    build:
+      dockerfile: base
+    push: yes
+    force: yes
+  tags:
+    - docker_build
+
+- name: Build Stage Docker image to use for production
+  docker_image:
+    name: registry:4000/stage
+    path: '{{role_path}}/files'
+    build:
+      dockerfile: stage
+    push: yes
+    force: yes
+  tags:
+    - docker_build

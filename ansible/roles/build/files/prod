@@ -1,0 +1,12 @@
+from registry:4000/stage:latest as build
+maintainer maannniii@gmail.com
+copy sample-react-app/my-app/ /app/
+workdir /app
+run CI=true yarn test && yarn build
+
+from registry:4000/base:latest
+RUN [ ! -d /app ] && mkdir /app || :
+copy --from=build /app/build/ /app/
+workdir /app
+entrypoint ["serve"]
+cmd [""]

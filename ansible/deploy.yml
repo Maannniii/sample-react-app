@@ -1,0 +1,7 @@
+- hosts: localhost
+  roles:
+    - build
+
+- hosts: all
+  roles:
+    - deploy

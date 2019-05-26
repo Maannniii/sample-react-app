@@ -1,0 +1,21 @@
+---
+# tasks file for build
+- name: Clone git repo
+  git: 
+    repo: '{{ git_repo }}'
+    dest: '{{role_path}}/files/sample-react-app'
+    force: yes
+  tags:
+      - git_clone
+
+- name: Build Docker image will exit if test cases fail.
+  docker_image:
+    name: registry:4000/prod
+    path: '{{role_path}}/files'
+    build: 
+      dockerfile: prod
+    push: yes
+    force: yes
+  tags:
+    - docker_build
+

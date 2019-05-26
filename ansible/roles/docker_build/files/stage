@@ -1,0 +1,4 @@
+from registry:4000/base:latest
+maintainer maannniii@gmail.com
+run cd / && npx create-react-app app && cd /app && (ls | grep -v node_modules | xargs rm -rf)
+workdir /app

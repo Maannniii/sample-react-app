@@ -1,5 +1,4 @@
-[![Build Status](http://142.93.221.126:8080/buildStatus/icon?job=react-build)](http://142.93.221.126:8080/job/react-build/)
-# Sample React App
+# Sample React App IaC
 Ansible project to setup, build and deploy docker containers on push to [Maannniii/sample-react-app](https://github.com/Maannniii/sample-react-app.git "Sample React App").
 
 ### Prerequisites:
